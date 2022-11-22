@@ -10,8 +10,13 @@ import java.util.List;
 public class UserController {
     @Autowired UserRepository repository;
 
-    @GetMapping("/user")
+    @GetMapping("/Users")
     public List<User> listAll(){
         return repository.findAll();
     }
+
+    /*@GetMapping("/Users")
+    public List<User> getByName(int id){
+        return repository.findBy(id);
+    }*/
 }
