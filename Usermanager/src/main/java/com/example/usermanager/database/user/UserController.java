@@ -1,4 +1,4 @@
-package com.example.usermanager.database;
+package com.example.usermanager.database.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
