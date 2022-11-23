@@ -1,22 +1,29 @@
 package com.example.usermanager.database.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("api/v1/user")
 public class UserController {
-    @Autowired UserRepository repository;
 
-    @GetMapping("/Users")
-    public List<User> listAll(){
-        return repository.findAll();
+    private UserService userService;
+
+    @Autowired
+    public UserController(UserService userService){
+        this.userService = userService;
     }
 
-    /*@GetMapping("/Users")
-    public List<User> getByName(int id){
-        return repository.findBy(id);
-    }*/
+    @GetMapping("/login")
+    public boolean loginUser(@RequestParam String username, @RequestParam String password){
+        return userService.loginUser(username, password);
+    }
+
+    @PostMapping()
+    public void registerUser(@RequestBody User user){
+        userService.addUser(user);
+    }
 }

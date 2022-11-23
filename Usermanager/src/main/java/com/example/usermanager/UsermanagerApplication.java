@@ -10,9 +10,6 @@ public class UsermanagerApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(UsermanagerApplication.class, args);
-
-		UserController userController = new UserController();
-		System.out.println(userController.listAll());
 	}
 
 }
