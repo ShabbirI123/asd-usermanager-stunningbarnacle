@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @RestController
@@ -18,12 +19,12 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public boolean loginUser(@RequestParam String username, @RequestParam String password){
+    public boolean loginUser(@RequestParam String username, @RequestParam String password) throws NoSuchAlgorithmException {
         return userService.loginUser(username, password);
     }
 
     @PostMapping()
-    public void registerUser(@RequestBody User user){
+    public void registerUser(@RequestBody User user) throws NoSuchAlgorithmException {
         userService.addUser(user);
     }
 }
