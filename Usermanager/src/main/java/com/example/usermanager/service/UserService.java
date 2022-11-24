@@ -1,10 +1,12 @@
-package com.example.usermanager.database.user;
+package com.example.usermanager.service;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.example.usermanager.model.User;
+import com.example.usermanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,7 @@ public class UserService {
 
     //TODO create account
     public void addUser(User user) throws NoSuchAlgorithmException {
-        Optional<User> userOptional = userRepository.findByUsername(user.getUsername());
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findByUsername(user.getUsername()));
 
         if (userOptional.isPresent()){
             throw new IllegalStateException("Username wird schon verwendet!");
@@ -44,9 +46,9 @@ public class UserService {
 
     //TODO login
     public boolean loginUser(String username, String password) throws NoSuchAlgorithmException {
-        Optional<User> userOptional = userRepository.findByUsernameAndPassword(username, UserService.encryptPassword(password));
+        User user = userRepository.findByUsernameAndPassword(username, UserService.encryptPassword(password));
 
-        if (!userOptional.isPresent()){
+        if (user == null){
             throw new IllegalStateException("Username oder Passwort ist falsch");
         }
 

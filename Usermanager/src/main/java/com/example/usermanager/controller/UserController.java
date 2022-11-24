@@ -1,11 +1,11 @@
-package com.example.usermanager.database.user;
+package com.example.usermanager.controller;
 
+import com.example.usermanager.model.User;
+import com.example.usermanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/user")
@@ -23,8 +23,18 @@ public class UserController {
         return userService.loginUser(username, password);
     }
 
-    @PostMapping()
+    @PostMapping("/register")
     public void registerUser(@RequestBody User user) throws NoSuchAlgorithmException {
         userService.addUser(user);
+    }
+
+    @PutMapping(path = "{id}")
+    public void changePassword(){
+
+    }
+
+    @DeleteMapping(path = "{id}")
+    public void deleteUser(){
+
     }
 }

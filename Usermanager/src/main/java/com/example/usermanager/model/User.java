@@ -1,4 +1,4 @@
-package com.example.usermanager.database.user;
+package com.example.usermanager.model;
 
 import javax.persistence.*;
 
@@ -34,6 +34,15 @@ public class User {
     }
 
     //Getter and Setter
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
