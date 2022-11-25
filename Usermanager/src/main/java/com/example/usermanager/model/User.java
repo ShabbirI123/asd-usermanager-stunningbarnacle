@@ -11,8 +11,8 @@ public class User {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false, length = 255)
-    private String name;
+    @Column(name = "firstname", nullable = false, length = 255)
+    private String firstname;
 
     @Column(name = "surname", nullable = false, length = 255)
     private String surname;
@@ -26,15 +26,14 @@ public class User {
     //Constructors
     public User(){}
 
-    public User(String name, String surname, String username, String password) {
-        this.name = name;
+    public User(String firstname, String surname, String username, String password) {
+        this.firstname = firstname;
         this.surname = surname;
         this.username = username;
         this.password = password;
     }
 
     //Getter and Setter
-
     public Integer getId() {
         return id;
     }
@@ -44,11 +43,11 @@ public class User {
     }
 
     public String getName() {
-        return name;
+        return firstname;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.firstname = name;
     }
 
     public String getSurname() {
@@ -79,7 +78,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + firstname + '\'' +
                 ", surname='" + surname + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
