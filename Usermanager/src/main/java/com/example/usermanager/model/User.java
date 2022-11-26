@@ -1,4 +1,4 @@
-package com.example.usermanager.database.user;
+package com.example.usermanager.model;
 
 import javax.persistence.*;
 
@@ -11,8 +11,8 @@ public class User {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false, length = 255)
-    private String name;
+    @Column(name = "firstname", nullable = false, length = 255)
+    private String firstname;
 
     @Column(name = "surname", nullable = false, length = 255)
     private String surname;
@@ -26,20 +26,36 @@ public class User {
     //Constructors
     public User(){}
 
-    public User(String name, String surname, String username, String password) {
-        this.name = name;
+    public User(String firstname, String surname, String username, String password) {
+        this.firstname = firstname;
+        this.surname = surname;
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(Integer id, String firstname, String surname, String username, String password) {
+        this.id = id;
+        this.firstname = firstname;
         this.surname = surname;
         this.username = username;
         this.password = password;
     }
 
     //Getter and Setter
-    public String getName() {
-        return name;
+    public Integer getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
     public String getSurname() {
@@ -64,5 +80,16 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", surname='" + surname + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
