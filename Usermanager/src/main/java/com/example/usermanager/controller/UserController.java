@@ -1,40 +1,75 @@
 package com.example.usermanager.controller;
 
 import com.example.usermanager.model.User;
-import com.example.usermanager.service.UserService;
+import com.example.usermanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import java.security.NoSuchAlgorithmException;
-
-@RestController
-@RequestMapping("api/v1/user")
+@Controller
 public class UserController {
 
-    private UserService userService;
+    private UserRepository userRepository;
 
     @Autowired
-    public UserController(UserService userService){
-        this.userService = userService;
+    public UserController(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
+    @GetMapping("/")
+    public String home(){
+        return "index";
     }
 
     @GetMapping("/login")
-    public boolean loginUser(@RequestParam String username, @RequestParam String password) throws NoSuchAlgorithmException {
-        return userService.loginUser(username, password);
+    public String login(){
+        return "login";
     }
 
-    @PostMapping("/register")
-    public void registerUser(@RequestBody User user) throws NoSuchAlgorithmException {
-        userService.addUser(user);
+    @GetMapping("/logout")
+    public String logout(){
+        return "logout";
     }
 
-    @PutMapping(path = "{id}")
-    public void changePassword(){
-
+    @GetMapping("/register")
+    public String register(){
+        return "register";
     }
 
-    @DeleteMapping(path = "{id}")
-    public void deleteUser(){
+    @GetMapping("/user")
+    public String user(Model model) throws Exception{
+        String username;
+        User user;
 
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+            user = userRepository.findByUsername(username);
+            model.addAttribute("user", user);
+        } else {
+            throw new Exception("User not found");
+        }
+        return "authPages/user";
+    }
+
+    @GetMapping("/edit")
+    public String edit(Model model) throws Exception{
+        String username;
+        User user;
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+            user = userRepository.findByUsername(username);
+            model.addAttribute("user", user);
+        } else {
+            throw new Exception("User not found");
+        }
+        return "authPages/edit";
     }
 }

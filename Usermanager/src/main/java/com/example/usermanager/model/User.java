@@ -33,6 +33,14 @@ public class User {
         this.password = password;
     }
 
+    public User(Integer id, String firstname, String surname, String username, String password) {
+        this.id = id;
+        this.firstname = firstname;
+        this.surname = surname;
+        this.username = username;
+        this.password = password;
+    }
+
     //Getter and Setter
     public Integer getId() {
         return id;
@@ -42,12 +50,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
+    public String getFirstname() {
         return firstname;
     }
 
-    public void setName(String name) {
-        this.firstname = name;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
     public String getSurname() {
@@ -78,7 +86,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + firstname + '\'' +
+                ", firstname='" + firstname + '\'' +
                 ", surname='" + surname + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
