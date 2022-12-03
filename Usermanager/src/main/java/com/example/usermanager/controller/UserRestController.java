@@ -1,11 +1,12 @@
 package com.example.usermanager.controller;
 
+import com.example.usermanager.Exceptions.User.DBInputException;
 import com.example.usermanager.model.User;
 import com.example.usermanager.service.UserService;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequestMapping("api/v1/user")
@@ -25,13 +26,15 @@ public class UserRestController {
         userService.addUser(user);
     }
 
-    @PutMapping(path = "{id}")
-    public void changePassword(){
-
+    @PutMapping( "/edit")
+    public void changePassword(@RequestBody ObjectNode objectNode) throws DBInputException {
+        userService.alterPassword(objectNode.get("id").asInt(),
+                objectNode.get("currentPassword").asText(),
+                objectNode.get("newPassword").asText());
     }
 
-    @DeleteMapping(path = "{id}")
-    public void deleteUser(){
-
+    @DeleteMapping("/delete")
+    public void deleteUser(@RequestBody ObjectNode objectNode) throws DBInputException {
+        userService.deleteAccount(objectNode.get("id").asInt(), objectNode.get("currentPassword").asText());
     }
 }
