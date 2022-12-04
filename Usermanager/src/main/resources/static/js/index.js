@@ -1,5 +1,6 @@
 $(document).ready(function () {
     //Simple client based login limitation by using localstorage
+
     if (localStorage.getItem('limit') >= '2') {
         //set date
         let t = new Date();
@@ -28,6 +29,7 @@ $(document).ready(function () {
     }
 
 
+
     function afterInactivityRedirect() {
         alert('Redirect');
         location.reload();
@@ -36,7 +38,9 @@ $(document).ready(function () {
     //setTimeout(afterInactivityRedirect, 60000);
 
     //Restriction of login attempts
+
     $('#login-btn').on('click', function () {
+
         let username = $('#username').val();
         let password = $('#password').val();
 

@@ -102,7 +102,6 @@ $(document).ready(function () {
             .fail(function () {
                 $('#delete-msg').html('Passwort ist nicht korrekt.')
             });
-
     });
 });
 
