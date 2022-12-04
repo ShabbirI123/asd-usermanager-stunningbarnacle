@@ -1,19 +1,33 @@
 $(document).ready(function () {
     //Simple client based login limitation by using localstorage
-   if (location.href === "http://localhost:8080/login?error"){
-       if (!localStorage.getItem('limit')){
-           localStorage.setItem('limit', "0");
-       } else {
-           let limit = parseInt(localStorage.getItem('limit'));
-           console.log(limit);
-           console.log(limit++)
-           localStorage.setItem('limit', limit.toString());
-       }
 
-       if(localStorage.getItem('limit') === '3'){
-           $('#login-btn').css('pointer-events', 'none');
-       }
-   }
+    if (localStorage.getItem('limit') >= '2') {
+        //set date
+        let t = new Date();
+        t.setSeconds(t.getSeconds() + 60);
+        if (!localStorage.getItem('date')) localStorage.setItem('date', t.toString());
+
+        if (new Date(localStorage.getItem('date')) > new Date()) {
+            //disable submit btn
+            $('#login-btn').css('pointer-events', 'none');
+            //Message
+            $('#blocked-msg').html("Benutzer bis zum " + localStorage.getItem('date') + " Uhr gesperrt");
+        } else {
+            localStorage.setItem('limit', '0');
+            localStorage.removeItem('date');
+        }
+    }
+
+    if (location.href === "http://localhost:8080/login?error") {
+        if (!localStorage.getItem('limit')) {
+            localStorage.setItem('limit', "0");
+        } else {
+            let limit = parseInt(localStorage.getItem('limit'));
+            if (limit < 2) limit++;
+            localStorage.setItem('limit', limit.toString());
+        }
+    }
+
 
 
     function afterInactivityRedirect() {
@@ -24,7 +38,9 @@ $(document).ready(function () {
     //setTimeout(afterInactivityRedirect, 60000);
 
     //Restriction of login attempts
-    $('#login-btn').on('click',function (){
+
+    $('#login-btn').on('click', function () {
+
         let username = $('#username').val();
         let password = $('#password').val();
 
@@ -48,9 +64,9 @@ $(document).ready(function () {
         });
 
 
-       if(localStorage.getItem('limit') === '3'){
-           $(this).css('pointer-events', 'none');
-       }
+        if (localStorage.getItem('limit') === '3') {
+            $(this).css('pointer-events', 'none');
+        }
     });
 
     $('#logout-btn').on('click', () => {

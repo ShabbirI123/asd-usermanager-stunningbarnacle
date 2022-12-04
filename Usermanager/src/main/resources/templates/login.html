@@ -21,15 +21,16 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" th:fragment="header">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}">Registration and Login System</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" th:href="@{/}">Registrierung und Login-System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </nav>
-<br />
-<br />
-<br />
+<br/>
+<br/>
+<br/>
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
@@ -37,14 +38,14 @@
                 <div class="alert alert-danger">Benutzername oder Passwort nicht korrekt!</div>
             </div>
             <div th:if="${param.expired}">
-                <div class="alert alert-warning">Your session expired.</div>
+                <div class="alert alert-warning">Ihre Sitzung ist abgelaufen.</div>
             </div>
             <div th:if="${param.logout}">
-                <div class="alert alert-success">You have been logged out.</div>
+                <div class="alert alert-success">Sie wurden abgemeldet.</div>
             </div>
             <div class="card">
                 <div class="card-header">
-                    <h3 class="text-center">Login Form</h3>
+                    <h3 class="text-center">Anmeldeformular</h3>
                 </div>
                 <div class="card-body">
                     <form
@@ -54,7 +55,7 @@
                             role="form"
                     >
                         <div class="mb-3">
-                            <label for="username" class="control-label">Username</label>
+                            <label for="username" class="control-label">Username *</label>
                             <input type="text"
                                    id="username"
                                    name="username"
@@ -75,9 +76,12 @@
 
                         <div class="mb-3">
                             <button id="login-btn" type="submit" class="btn btn-primary">Login</button>
-                            <span> Not registered?
-                            <a th:href="@{/register}"> Register/SignUp Here</a>
-                        </span>
+                            <span>Nicht registriert?
+                                <a th:href="@{/register}">Hier registrieren/anmelden</a>
+                            </span>
+                            <div>
+                                <div id="blocked-msg" class="alert"></div>
+                            </div>
                         </div>
                     </form>
                 </div>

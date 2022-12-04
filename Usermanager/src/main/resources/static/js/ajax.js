@@ -46,7 +46,8 @@ $(document).ready(function () {
             return;
         }
 
-        if (newPassword !== secondNewPassword){
+        if (newPassword !== secondNewPassword) {
+            $('#pwd-msg').html('Passwörter stimmen nicht überein.')
             return;
         }
 
@@ -64,8 +65,13 @@ $(document).ready(function () {
             }),
         };
 
-        $.ajax(settings).done(function (response) {
-        });
+        $.ajax(settings)
+            .done(function (response) {
+                $('#pwd-msg').html('Passwort geändert.')
+            })
+            .fail(function () {
+                $('#pwd-msg').html('Passwort ist nicht korrekt.')
+            });
     });
     //Delete account
     $('#delete-account-btn').on('click', function () {
@@ -89,9 +95,13 @@ $(document).ready(function () {
             }),
         };
 
-        $.ajax(settings).done(function (response) {
-            window.location = "http://localhost:8080/logout"
-        });
+        $.ajax(settings)
+            .done(function (response) {
+                window.location = "http://localhost:8080/logout"
+            })
+            .fail(function () {
+                $('#delete-msg').html('Passwort ist nicht korrekt.')
+            });
     });
 });
 

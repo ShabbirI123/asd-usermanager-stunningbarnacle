@@ -22,7 +22,7 @@ public class UserRestController {
 
 
     @PostMapping("/register")
-    public void registerUser(@RequestBody User user) throws Exception {
+    public void registerUser(@RequestBody User user) throws DBInputException {
         userService.addUser(user);
     }
 

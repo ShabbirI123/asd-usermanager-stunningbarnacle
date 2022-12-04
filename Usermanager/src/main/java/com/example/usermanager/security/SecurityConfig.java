@@ -37,6 +37,7 @@ public class SecurityConfig {
         //For the pages
         httpSecurity.csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/register").permitAll()
                 .antMatchers("/register/**").permitAll()
                 .antMatchers("/index").permitAll()
                 .antMatchers("/user").hasAnyRole("ADMIN","USER")
