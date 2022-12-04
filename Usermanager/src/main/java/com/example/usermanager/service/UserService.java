@@ -10,38 +10,42 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     /*
-    * All the logic for the application is here
-    * We have:
-    *   Create account
-    *   Login
-    *   Logout
-    *   Change account information
-    *   Delete account
-    * */
+     * All the logic for the application is here
+     * We have:
+     *   Create account
+     *   Login
+     *   Logout
+     *   Change account information
+     *   Delete account
+     * */
 
-    public UserService(){
+    public UserService() {
 
     }
+
     private UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     //TODO create account
-    public void addUser(User user) throws Exception {
+    public void addUser(User user) throws DBInputException {
+
         User user1 = userRepository.findByUsername(user.getUsername());
 
-        if (user1 != null){
-            throw new IllegalStateException("Username wird schon verwendet!");
+        if (user1 != null) {
+            throw new DBInputException("Der Benutzername ist bereits vergeben!", null);
         }
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new DBInputException("Es gab ein Problem beim Speichern!", null);
+        }
     }
 
     //TODO change account information
@@ -50,12 +54,12 @@ public class UserService {
 
         User user = userRepository.findByID(id);
 
-        if (user == null){
-            throw new DBInputException(id + " " + bCryptPasswordEncoder.encode(currentPassword) + " " +newPassword, null);
+        if (user == null) {
+            throw new DBInputException(id + " " + bCryptPasswordEncoder.encode(currentPassword) + " " + newPassword, null);
         }
 
-        if (!bCryptPasswordEncoder.matches(currentPassword, user.getPassword())){
-            throw new DBInputException("Passwort ist nicht korrekt", null);
+        if (!bCryptPasswordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new DBInputException("Passwort ist nicht korrekt!", null);
         }
 
         user.setPassword(bCryptPasswordEncoder.encode(newPassword));
@@ -69,11 +73,11 @@ public class UserService {
 
         User user = userRepository.findByID(id);
 
-        if (user == null){
+        if (user == null) {
             throw new DBInputException("Passwort stimmt nicht!", null);
         }
 
-        if (!bCryptPasswordEncoder.matches(currentPassword, user.getPassword())){
+        if (!bCryptPasswordEncoder.matches(currentPassword, user.getPassword())) {
             throw new DBInputException("Passwort ist nicht korrekt", null);
         }
 
