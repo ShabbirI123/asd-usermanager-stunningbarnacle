@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserServiceTest {
@@ -17,47 +16,53 @@ class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    UserService userService = new UserService(userRepository);
+
+    User user = getUser();
+
     @Test
     void addUser_username_notInUse() throws DBInputException {
-        UserService userService = new UserService(userRepository);
-
-        User user = new User(
-                "Shabbir",
-                "Islam",
-                "shabby",
-                "password"
-        );
-
-
         userService.addUser(user);
 
-        assertEquals(userRepository.findByUsername("shabby").getUsername(), user.getUsername());
+        assertEquals(userRepository.findByUsername("shabbysama").getUsername(), user.getUsername());
     }
 
     @Test
-    void addUser_username_inUse() throws DBInputException {
-        UserService userService = new UserService(userRepository);
-
-        User user = new User(
-                "Shabbir",
-                "Islam",
-                "shabby",
-                "password"
-        );
-
+    void addUser_username_inUse() {
         assertThrows(DBInputException.class, () -> userService.addUser(user));
     }
 
+    //TODO: figure out why password stuff fails
     @Test
-    void alterPassword() {
+    void alterPassword() throws DBInputException {
+        userService.alterPassword(user.getId(), user.getPassword(), "test");
+
+        assertEquals("test", user.getPassword());
+
     }
 
     @Test
-    void deleteAccount() {
+    void deleteAccount() throws DBInputException {
+        String password = user.getPassword();
+        userService.deleteAccount(user.getId(), password);
+
+        assertNull(userRepository.findByUsername(user.getUsername()));
+
     }
 
     @AfterAll
     static void tearDown() {
         //TODO: implement tearDown method
+    }
+
+    private User getUser() {
+        return new User(
+                4,
+                "Shabbir",
+                "Islam",
+                "shabbysama",
+                "password"
+        );
     }
 }
