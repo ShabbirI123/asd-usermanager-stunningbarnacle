@@ -37,11 +37,11 @@ class UserServiceTest {
     @DisplayName("Test to add new user")
     @Order(1)
     void addUser_username_notInUse() throws DBInputException {
-        //
+        //Arrange/Act
         userService.addUser(newUser);
         User addedUser = userRepository.findByUsername(newUser.getUsername());
 
-        //
+        //Assert
         assertEquals(addedUser.getUsername(), newUser.getUsername());
     }
 
@@ -49,7 +49,7 @@ class UserServiceTest {
     @DisplayName("Try to add a existing user")
     @Order(2)
     void addUser_username_inUse() {
-        //
+        //Arrange/Act/Assert
         assertThrows(DBInputException.class, () -> userService.addUser(newUser));
     }
 
@@ -58,7 +58,7 @@ class UserServiceTest {
     @Order(3)
     @ValueSource(ints = {1, 0, -3, -5, Integer.MAX_VALUE})
     void alter_password_wrong_id(int id) throws DBInputException {
-        //
+        //Arrange/Act/Assert
         assertThrows(DBInputException.class, () -> userService.alterPassword(id, "password", newPassword));
     }
 
@@ -66,10 +66,10 @@ class UserServiceTest {
     @DisplayName("Change password with wrong password")
     @Order(4)
     void alter_password_with_wrong_password() throws DBInputException {
-        //
+        //Arrange/Act
         User user = userRepository.findByUsername(newUser.getUsername());
 
-        //
+        //Assert
         assertThrows(DBInputException.class, () -> userService.alterPassword(user.getId(), "password123", newPassword));
     }
 
@@ -77,12 +77,14 @@ class UserServiceTest {
     @DisplayName("Change password")
     @Order(5)
     void alter_password() throws DBInputException {
-        //
+        //Arrange
         User user = userRepository.findByUsername(newUser.getUsername());
+
+        //Act
         userService.alterPassword(user.getId(), "password", newPassword);
         User alteredPasswordUser = userRepository.findByUsername(newUser.getUsername());
 
-        //
+        //Assert
         assertEquals(true, bCryptPasswordEncoder.matches(newPassword, alteredPasswordUser.getPassword()));
     }
 
@@ -90,11 +92,11 @@ class UserServiceTest {
     @DisplayName("Delete user with wrong password")
     @Order(6)
     void delete_account_with_wrong_password() throws DBInputException {
-        //
+        //Arrange/Act
         User user = userRepository.findByUsername(newUser.getUsername());
         String currentPassword = "wrongPwd";
 
-        //
+        //Assert
         assertThrows(DBInputException.class, () -> userService.deleteAccount(user.getId(), currentPassword));
     }
 
@@ -102,12 +104,14 @@ class UserServiceTest {
     @DisplayName("Delete user")
     @Order(7)
     void delete_account() throws DBInputException {
-        //
+        //Arrange
         User user = userRepository.findByUsername(newUser.getUsername());
         String currentPassword = newPassword;
+
+        //Act
         userService.deleteAccount(user.getId(), currentPassword);
 
-        //
+        //Assert
         assertNull(userRepository.findByUsername(newUser.getUsername()));
     }
 
