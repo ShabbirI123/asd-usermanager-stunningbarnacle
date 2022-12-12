@@ -3,66 +3,116 @@ package com.example.usermanager.service;
 import com.example.usermanager.Exceptions.User.DBInputException;
 import com.example.usermanager.model.User;
 import com.example.usermanager.repository.UserRepository;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest()
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserServiceTest {
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
-    UserService userService = new UserService(userRepository);
+    private UserService userService = new UserService(userRepository);
+    private static BCryptPasswordEncoder bCryptPasswordEncoder;
+    private static User newUser;
+    private String newPassword = "test123";
 
-    User user = getUser();
+    @BeforeAll
+    static void setup() {
+        Logger.getLogger(UserServiceTest.class.getName()).log(Level.INFO, "Executed init method.");
+        bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        newUser = new User("Shabbir", "Islam", "shabbir123", "password");
+    }
 
     @Test
+    @DisplayName("Test to add new user")
+    @Order(1)
     void addUser_username_notInUse() throws DBInputException {
-        userService.addUser(user);
+        //
+        userService.addUser(newUser);
+        User addedUser = userRepository.findByUsername(newUser.getUsername());
 
-        assertEquals(userRepository.findByUsername("shabbysama").getUsername(), user.getUsername());
+        //
+        assertEquals(addedUser.getUsername(), newUser.getUsername());
     }
 
     @Test
+    @DisplayName("Try to add a existing user")
+    @Order(2)
     void addUser_username_inUse() {
-        assertThrows(DBInputException.class, () -> userService.addUser(user));
+        //
+        assertThrows(DBInputException.class, () -> userService.addUser(newUser));
     }
 
-    //TODO: figure out why password stuff fails
-    @Test
-    void alterPassword() throws DBInputException {
-        userService.alterPassword(user.getId(), user.getPassword(), "test");
-
-        assertEquals("test", user.getPassword());
-
+    @ParameterizedTest
+    @DisplayName("Change password with wrong id")
+    @Order(3)
+    @ValueSource(ints = {1, 0, -3, -5, Integer.MAX_VALUE})
+    void alter_password_wrong_id(int id) throws DBInputException {
+        //
+        assertThrows(DBInputException.class, () -> userService.alterPassword(id, "password", newPassword));
     }
 
     @Test
-    void deleteAccount() throws DBInputException {
-        String password = user.getPassword();
-        userService.deleteAccount(user.getId(), password);
+    @DisplayName("Change password with wrong password")
+    @Order(4)
+    void alter_password_with_wrong_password() throws DBInputException {
+        //
+        User user = userRepository.findByUsername(newUser.getUsername());
 
-        assertNull(userRepository.findByUsername(user.getUsername()));
+        //
+        assertThrows(DBInputException.class, () -> userService.alterPassword(user.getId(), "password123", newPassword));
+    }
 
+    @Test
+    @DisplayName("Change password")
+    @Order(5)
+    void alter_password() throws DBInputException {
+        //
+        User user = userRepository.findByUsername(newUser.getUsername());
+        userService.alterPassword(user.getId(), "password", newPassword);
+        User alteredPasswordUser = userRepository.findByUsername(newUser.getUsername());
+
+        //
+        assertEquals(true, bCryptPasswordEncoder.matches(newPassword, alteredPasswordUser.getPassword()));
+    }
+
+    @Test
+    @DisplayName("Delete user with wrong password")
+    @Order(6)
+    void delete_account_with_wrong_password() throws DBInputException {
+        //
+        User user = userRepository.findByUsername(newUser.getUsername());
+        String currentPassword = "wrongPwd";
+
+        //
+        assertThrows(DBInputException.class, () -> userService.deleteAccount(user.getId(), currentPassword));
+    }
+
+    @Test
+    @DisplayName("Delete user")
+    @Order(7)
+    void delete_account() throws DBInputException {
+        //
+        User user = userRepository.findByUsername(newUser.getUsername());
+        String currentPassword = newPassword;
+        userService.deleteAccount(user.getId(), currentPassword);
+
+        //
+        assertNull(userRepository.findByUsername(newUser.getUsername()));
     }
 
     @AfterAll
     static void tearDown() {
-        //TODO: implement tearDown method
-    }
-
-    private User getUser() {
-        return new User(
-                4,
-                "Shabbir",
-                "Islam",
-                "shabbysama",
-                "password"
-        );
+        Logger.getLogger(UserServiceTest.class.getName()).log(Level.INFO, "End testing");
     }
 }

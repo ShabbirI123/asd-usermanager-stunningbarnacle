@@ -31,7 +31,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    //TODO create account
     public void addUser(User user) throws DBInputException {
 
         User user1 = userRepository.findByUsername(user.getUsername());
@@ -49,7 +48,6 @@ public class UserService {
         }
     }
 
-    //TODO change account information
     public void alterPassword(int id, String currentPassword, String newPassword) throws DBInputException {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -68,7 +66,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    //TODO delete account
     public void deleteAccount(int id, String currentPassword) throws DBInputException {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
