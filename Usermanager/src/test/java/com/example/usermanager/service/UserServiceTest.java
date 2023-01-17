@@ -56,7 +56,7 @@ class UserServiceTest {
     @ParameterizedTest
     @DisplayName("Change password with wrong id")
     @Order(3)
-    @ValueSource(ints = {1, 0, -3, -5, Integer.MAX_VALUE})
+    @ValueSource(ints = {10, 0, -3, -5, Integer.MAX_VALUE})
     void alter_password_wrong_id(int id) throws DBInputException {
         //Arrange/Act/Assert
         assertThrows(DBInputException.class, () -> userService.alterPassword(id, "password", newPassword));
