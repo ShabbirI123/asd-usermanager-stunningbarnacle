@@ -18,8 +18,8 @@ jobs:
     steps:
       # Checkout the code as the first step.
       - checkout:
-          path: ~/Usermanager
-          
+          path: ~/asd-usermanager-stunningbarnacle
+
       - run: 
            name: All
            command: ls -a
