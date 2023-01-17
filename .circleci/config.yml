@@ -19,12 +19,12 @@ jobs:
       # Checkout the code as the first step.
       - checkout
       - run: 
-           name: All
-           command: ls -a
-           
-      - run: 
            name: Change Directory
            command: cd Usermanager
+
+      - run: 
+           name: All
+           command: ls -a
       # Use mvn clean and package as the standard maven build phase
       - run:
           name: Build
