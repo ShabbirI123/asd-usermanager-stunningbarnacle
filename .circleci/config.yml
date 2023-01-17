@@ -18,7 +18,9 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       # Checkout the code as the first step.
-      - checkout
+      - checkout:
+          path: ~/asd-usermanager-stunningbarnacle/Usermanager
+
       - run: 
            name: Change Directory
            command: cd Usermanager
