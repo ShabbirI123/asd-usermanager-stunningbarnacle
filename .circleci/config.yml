@@ -18,7 +18,9 @@ jobs:
     steps:
       # Checkout the code as the first step.
       - checkout
-      - run: ls -a
+      - run: 
+           name: All
+           command: ls -a
       # Use mvn clean and package as the standard maven build phase
       - run:
           name: Build
