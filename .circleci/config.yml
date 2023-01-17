@@ -21,6 +21,10 @@ jobs:
       - run: 
            name: All
            command: ls -a
+           
+      - run: 
+           name: Change Directory
+           command: cd Usermanager
       # Use mvn clean and package as the standard maven build phase
       - run:
           name: Build
