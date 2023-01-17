@@ -19,7 +19,7 @@ jobs:
     steps:
       # Checkout the code as the first step.
       - checkout:
-          path: ~/asd-usermanager-stunningbarnacle/Usermanager
+          path: ~/../Usermanager
 
       - run: 
            name: Change Directory
