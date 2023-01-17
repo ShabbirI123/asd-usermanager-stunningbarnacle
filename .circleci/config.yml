@@ -19,10 +19,7 @@ jobs:
       # Checkout the code as the first step.
       - checkout:
           path: ~/Usermanager
-      - run: 
-           name: Change Directory
-           command: cd Usermanager
-
+          
       - run: 
            name: All
            command: ls -a
